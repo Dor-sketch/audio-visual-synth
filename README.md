@@ -1,6 +1,8 @@
 # AudioVisualSynth
 
-![alt text](images/cover.png)
+<p align="center">
+  <img src="images/david.gif" alt="AudioVisualSynth Logo">
+</p>
 
 ![License](https://img.shields.io/github/license/Dor-sketch/AudioVisualSynth)
 ![Issues](https://img.shields.io/github/issues/Dor-sketch/AudioVisualSynth)
