@@ -51,11 +51,34 @@ To run AudioVisualSynth, you need to have Python installed along with several de
 
 ## Usage
 
-Use your keyboard to interact with the synthesizer. Each key corresponds to a different MIDI note and triggers a unique visual effect.
+Use your keyboard to interact with the synthesizer. Each key corresponds to a different MIDI note and triggers a unique visual effect. For extanding a note, hold the `space` key while pressing the desired note - like in piano.
+
+For example, the following keys are mapped to MIDI notes:
+
+- `a` - C4
+- `s` - D4
+- `d` - E4
+- `f` - F4
+- `g` - G4
+...
+
+The sharps and flats are mapped to the keys above - like the black keys in piano.
+
+- `w` - C#4
+- `e` - D#4
+- `t` - F#4
+- `y` - G#4
+...
 
 ## Contributing
 
-Contributions are welcome! Feel free to open an issue or submit a pull request if you have any suggestions or improvements.
+Contributions are welcome! Feel free to open an issue or submit a pull request if you have any suggestions or improvements. The following are some ways you can contribute to this project:
+
+- Performance optimization: The current implementation may not be optimized for speed or memory usage. You could help improve the performance of the synthesizer by optimizing the code or using more efficient algorithms.
+
+- Improve user experience: The current user interface is minimalistic and may not be user-friendly. You could help improve the user experience by adding more features, improving the visual design, or providing better feedback to the user.
+
+- Implement the music sheets images processing feature: The current implementation of the music sheets images processing feature is in beta and may not work correctly in all cases. You could help improve this feature by adding more robust image processing algorithms or improving the accuracy of the note detection.
 
 ## License
 

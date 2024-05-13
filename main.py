@@ -1,61 +1,68 @@
+"""
+This module initializes an OpenGL window using Pygame and handles
+keyboard inputs to play musical notes and create visual effects with particles.
+It utilizes the simpleaudio library for sound generation and playback,
+and custom modules for musical notes and color mappings.
+"""
+
 import simpleaudio as sa
 import pygame
-from pygame.locals import *
-from OpenGL.GL import *
-from OpenGL.GLUT import *
-from OpenGL.GLU import *
-from particles import Particle
-from music import generate_note, key_to_note
+from particles import Particle, render_scene
+from music import generate_note
+from notes_color import key_to_note
+from init import init_pygame
 
 
-def main():
-    pygame.init()
+def handle_keydown(event, keys_being_pressed, note_generators, particles):
+    """Handles keydown events to play notes and generate particles."""
+    if event.key in key_to_note and event.key not in keys_being_pressed:
+        play_note(event, keys_being_pressed, note_generators)
+        particles.append(Particle(0, 0, 0, key_to_note[event.key]))
+
+
+def play_note(event, keys_being_pressed, note_generators):
+    """Generates and plays a note based on the key pressed."""
+    current_note = key_to_note[event.key]
+    keys_being_pressed[event.key] = current_note
+    note_settings = {
+        "attack_time": 0.1,
+        "decay_time": 0.1,
+        "release_time": 0.1,
+        "duration": 0.7
+    }
+    if pygame.key.get_pressed()[pygame.K_SPACE]:
+        note_settings["duration"] *= 2
+    note_samples = generate_note(current_note, **note_settings)
+    note_generators[event.key] = sa.play_buffer(note_samples, 1, 2, 44100)
+
+
+def handle_keyup(event, keys_being_pressed):
+    """Cleans up resources after a key is released."""
+    if event.key in keys_being_pressed:
+        del keys_being_pressed[event.key]
+        pygame.time.set_timer(pygame.USEREVENT, 1000)
+
+
+def main_loop():
+    """Main loop for handling events and rendering the scene."""
+    display = (600, 600)
+    init_pygame(display)
     particles = []
-    display = (800, 600)
-    pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
-    gluPerspective(45, (display[0]/display[1]), 0.1, 50.0)
-    glTranslatef(0.0, 0.0, -5)
-    glEnable(GL_BLEND)
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
     running = True
     keys_being_pressed = {}
     note_generators = {}
-
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
             elif event.type == pygame.KEYDOWN:
-                if event.key in key_to_note and event.key not in keys_being_pressed:
-                    # Start generating the note for this key
-                    current_note = key_to_note[event.key]
-                    keys_being_pressed[event.key] = current_note
-                    # Generate a 2-second note
-                    note_samples = generate_note(current_note, duration=2)
-                    note_generators[event.key] = sa.play_buffer(
-                        note_samples, 1, 2, 44100)
-                    # Create a new particle system for the note
-                    particles.append(Particle(0, 0, 0, current_note))
+                handle_keydown(event, keys_being_pressed,
+                               note_generators, particles)
             elif event.type == pygame.KEYUP:
-                if event.key in keys_being_pressed:
-                    # Stop generating the note for this key
-                    del keys_being_pressed[event.key]
-                    # Don't stop the note immediately, let it continue playing until the end of the fade-out period
-                    # Set a timer to fire an event after 1 second
-                    pygame.time.set_timer(pygame.USEREVENT, 1000)
-                    note_to_stop = event.key  # Remember which note to stop
-
-        glRotatef(1, 3, 1, 1)
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        # Update and draw all particles
-        [p.move() for p in particles]
-        [p.draw() for p in particles]
-
-        pygame.display.flip()
-        pygame.time.wait(10)
-
+                handle_keyup(event, keys_being_pressed)
+        render_scene(particles)
     pygame.quit()
-    quit()
 
 
-main()
+if __name__ == "__main__":
+    main_loop()
