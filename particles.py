@@ -9,7 +9,7 @@ moving in different directions.
 import random
 import numpy as np
 import pygame
-from notes_color import note_to_color
+from .notes_color import note_to_color
 from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *

@@ -10,10 +10,10 @@ import soundfile as sf
 import pygame
 import numpy as np
 import simpleaudio as sa
-from particles import Particle, render_scene
-from notes_color import note_to_midi
-from hatikva import hatikva_notes
-from init import init_pygame
+from .particles import Particle, render_scene
+from .notes_color import note_to_midi
+from .hatikva import hatikva_notes
+from .init import init_pygame
 
 
 def validate_input(note, duration, volume, sample_rate, attack_time, decay_time, sustain_level, release_time):
@@ -53,65 +53,33 @@ def validate_input(note, duration, volume, sample_rate, attack_time, decay_time,
     if not isinstance(duration, (int, float)):
         raise ValueError("Duration must be a number")
 
-
-def generate_note(
-    note,
-    duration=0.1,
+def generate_single_note(
+    note=64,
+    duration=1.0,
     volume=0.5,
     sample_rate=44100,
-    attack_time=0.1,
-    decay_time=0.1,
-    sustain_level=0.5,
-    release_time=0.1,
+    attack_time=0.01,
+    decay_time=0.01,
+    sustain_level=0.7,
+    release_time=0.01,
 ):
-    """
-    Generate a note with the given parameters.
-
-    Parameters:
-        note (int or list): The MIDI note number or a list of MIDI note numbers.
-        duration (float): The duration of the note in seconds.
-        volume (float): The volume of the note (0 to 1).
-        sample_rate (int): The sample rate of the audio.
-        attack_time (float): The attack time of the note in seconds.
-        decay_time (float): The decay time of the note in seconds.
-        sustain_level (float): The sustain level of the note (0 to 1).
-        release_time (float): The release time of the note in seconds.
-
-    Returns:
-        numpy.ndarray: The audio samples of the note.
-    """
-    try:
-        validate_input(note, duration, volume, sample_rate,
-                       attack_time, decay_time, sustain_level, release_time)
-    except ValueError as e:
-        print(f"Error: {e}")
-        return np.array([])
-
-    if isinstance(note, list):
-        return np.concatenate(
-            [
-                generate_note(
-                    n,
-                    duration=duration,
-                    volume=volume,
-                    sample_rate=sample_rate,
-                    attack_time=attack_time,
-                    decay_time=decay_time,
-                    sustain_level=sustain_level,
-                    release_time=release_time,
-                )
-                for n in note
-            ]
-        )
-
+    if duration < 0.1:
+        duration = 0.1
+    # adajust parametrs based on duration
+    if duration < attack_time + decay_time + release_time:
+        attack_time = duration * 0.1
+        decay_time = duration * 0.1
+        release_time = duration * 0.1
     # Convert MIDI note number to frequency
-    frequency = 440 * 2 ** ((note - 69) / 12)
+    base_frequency = 440 * 2 ** ((note - 69) / 12)
 
     # Generate the time values
     t_values = np.linspace(0, duration, int(duration * sample_rate), False)
 
-    # Generate the note
-    note_samples = np.sin(frequency * t_values * 2 * np.pi)
+    # Generate the note with harmonics
+    note_samples = np.sin(base_frequency * t_values * 2 * np.pi)
+    for harmonic in range(2, 5):
+        note_samples += 0.5 / harmonic * np.sin(harmonic * base_frequency * t_values * 2 * np.pi)
 
     # Generate the ADSR envelope
     total_samples = len(note_samples)
@@ -119,6 +87,9 @@ def generate_note(
     decay_samples = int(decay_time * sample_rate)
     release_samples = int(release_time * sample_rate)
     sustain_samples = total_samples - attack_samples - decay_samples - release_samples
+
+    if sustain_samples < 0:
+        raise ValueError("Invalid envelope times: attack + decay + release > duration")
 
     envelope = np.concatenate(
         [
@@ -135,8 +106,15 @@ def generate_note(
     # Convert to 16-bit PCM audio
     audio = note_samples * (2**15 - 1) * volume
     return audio.astype(np.int16)
-
-
+def generate_note(note, *args, **kwargs):
+    if isinstance(note, list):
+        # Generate all notes in the chord and return them as a list
+        return [
+            generate_single_note(n, *args, **kwargs)
+            for n in note
+        ]
+    else:
+        return [generate_single_note(note, *args, **kwargs)]
 def notes_to_midi(chords):
     """
     Convert a list of chords in note names to a list of chords in MIDI numbers.
@@ -169,18 +147,52 @@ def handle_event(event):
         return False
     return True
 
+def get_current_time():
+    return pygame.time.get_ticks()
 
-def play_note(cur_note, next_note_time, all_samples, particles):
-    current_time = pygame.time.get_ticks()
-    if cur_note < len(hatikva_notes) and current_time >= next_note_time:
-        note = hatikva_notes[cur_note]
-        duration = hatikva_durations[cur_note]
-        note_samples = generate_note(note, duration=duration)
-        sa.play_buffer(note_samples, 1, 2, 44100)
+def is_note_ready_to_play(cur_note, next_note_time):
+    current_time = get_current_time()
+    return cur_note < len(hatikva_notes) and current_time >= next_note_time
+
+def get_note_and_duration(cur_note):
+    note = hatikva_notes[cur_note]
+    duration = hatikva_durations[cur_note]
+    return note, duration
+import threading
+
+def generate_and_play_note(note=64, duration=1.0):
+    # Generate the notes
+    notes = generate_note(note, duration=duration)
+
+    # Play each note in a separate thread
+    for note_samples in notes:
+        threading.Thread(target=sa.play_buffer, args=(note_samples, 1, 2, 44100)).start()
+
+    return notes[0] if notes else None
+
+def append_particle(particles, note):
+    if particles is not None:
         particles.append(Particle(0, 0, 0, note))
-        cur_note += 1
-        next_note_time = current_time + int(duration * 1000)
+
+def update_all_samples(all_samples, note_samples):
+    if all_samples is None:
+        all_samples = note_samples
+    else:
         all_samples.extend(note_samples)
+    return all_samples
+
+def update_note_and_time(cur_note, duration):
+    cur_note += 1
+    next_note_time = get_current_time() + int(duration * 1000)
+    return cur_note, next_note_time
+
+def play_note(cur_note, next_note_time, all_samples=None, particles=None):
+    if is_note_ready_to_play(cur_note, next_note_time):
+        note, duration = get_note_and_duration(cur_note)
+        note_samples = generate_and_play_note(note, duration)
+        append_particle(particles, note)
+        all_samples = update_all_samples(all_samples, note_samples)
+        cur_note, next_note_time = update_note_and_time(cur_note, duration)
     return cur_note, next_note_time, all_samples
 
 
