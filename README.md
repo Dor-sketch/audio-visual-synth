@@ -19,6 +19,15 @@ Welcome to AudioVisualSynth, an interactive audio-visual synthesizer that combin
 - **Dynamic Particle System**: Particles move and change in response to music, providing a visual representation of the audio.
 - **Music Sheets Images Processing**: Convert music sheets images to MIDI notes (beta).
 
+### 3D Notes Animation
+
+[Watch the video here](https://github.com/Dor-sketch/AudioVisualSynth/assets/138825033/42a33834-a56d-4695-8607-f15fd25d123d)
+
+
+### `HaTikva` Synth Autoplay mode
+
+[Watch the video here](https://github.com/Dor-sketch/AudioVisualSynth/assets/138825033/5d5aa6d6-9688-42f7-89ef-ec6a32943f91)
+
 ## Installation
 
 To run AudioVisualSynth, you need to have Python installed along with several dependencies. Here's how you can get started:
