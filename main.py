@@ -7,10 +7,10 @@ and custom modules for musical notes and color mappings.
 
 import simpleaudio as sa
 import pygame
-from particles import Particle, render_scene
-from music import generate_note
-from notes_color import key_to_note
-from init import init_pygame
+from music.graphics.particles import Particle, render_scene
+from music.music import generate_and_play_note
+from music.graphics.notes_color import key_to_note
+from music.graphics.init import init_pygame
 
 
 def handle_keydown(event, keys_being_pressed, note_generators, particles):
@@ -22,7 +22,7 @@ def handle_keydown(event, keys_being_pressed, note_generators, particles):
 
 def play_note(event, keys_being_pressed, note_generators):
     """Generates and plays a note based on the key pressed."""
-    current_note = key_to_note[event.key]
+    current_note = [key_to_note[event.key]]
     keys_being_pressed[event.key] = current_note
     note_settings = {
         "attack_time": 0.1,
@@ -32,7 +32,8 @@ def play_note(event, keys_being_pressed, note_generators):
     }
     if pygame.key.get_pressed()[pygame.K_SPACE]:
         note_settings["duration"] *= 2
-    note_samples = generate_note(current_note, **note_settings)
+    note_samples = generate_and_play_note(
+        current_note[0], **note_settings)
     note_generators[event.key] = sa.play_buffer(note_samples, 1, 2, 44100)
 
 

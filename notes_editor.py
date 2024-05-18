@@ -8,7 +8,7 @@ note_to_midi function to convert note names to MIDI numbers.
 
 import pygame
 import numpy as np
-from .music import generate_note, note_to_midi
+from .music.music import generate_note, note_to_midi
 # Your generate_note function here
 
 # Initialize Pygame
