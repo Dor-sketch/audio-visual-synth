@@ -6,5 +6,5 @@ __pycache__
 *.wav
 *.avi
 *.mp3
-/web/*
-!/web/main.py
+/AudioVisualSynth/
+!/AudioVisualSynth/main.py
