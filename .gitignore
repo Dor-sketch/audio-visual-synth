@@ -6,5 +6,5 @@ __pycache__
 *.wav
 *.avi
 *.mp3
-/AudioVisualSynth/
+/AudioVisualSynth/*
 !/AudioVisualSynth/main.py
