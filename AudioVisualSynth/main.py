@@ -113,7 +113,7 @@ async def handle_keyup(event, keys_being_pressed):
         del keys_being_pressed[event.key]
 
 def render_scene(screen, particles, key_positions, keys_being_pressed):
-    screen.fill((0, 0, 0))
+    screen.fill((30, 30, 30))
     draw_piano_keys(screen, key_positions, keys_being_pressed)
     for particle in particles:
         particle.move()
@@ -121,36 +121,45 @@ def render_scene(screen, particles, key_positions, keys_being_pressed):
     pygame.display.flip()
 
 def draw_piano_keys(screen, key_positions, keys_being_pressed):
-    white_keys = [0, 2, 4, 5, 7, 9, 11]
-    black_keys = [1, 3, 6, 8, 10]
+    white_keys = [note for note in key_positions if note % 12 in [0, 2, 4, 5, 7, 9, 11]]
+    key_width = screen.get_width() // len(white_keys)
 
-    key_width = screen.get_width() // len(note_to_color)
-    black_key_width = key_width // 2
-    black_key_height = key_width
+    for note, (x, y) in key_positions.items():
+        color = note_to_color.get(note, (255, 255, 255))
+        key_rect = pygame.Rect(x - key_width // 2, y - 100, key_width, 100)
+        if note in keys_being_pressed.values():
+            # if key is black draw black color
+            if note % 12 in [1, 3, 6, 8, 10]:
+                pygame.draw.rect(screen, (0, 0, 0), key_rect)
+            else:
+                pygame.draw.rect(screen, (255, 255, 255), key_rect)
+        # if black key draw darker color
+        if note % 12 in [1, 3, 6, 8, 10]:
+            color = tuple(int(c * 0.8) for c in color)
+        pygame.draw.rect(screen, color, key_rect, 5)
 
-    for i, note in enumerate(note_to_color.keys()):
-        octave = (note // 12) - 4
-        x = (i * key_width) % screen.get_width()
-        is_pressed = note in keys_being_pressed.values()
-        color = (180, 180, 180) if is_pressed else (255, 255, 255)
-        if note % 12 in white_keys:
-            pygame.draw.rect(screen, color, (x, screen.get_height() - 150, key_width, 150))
-            pygame.draw.rect(screen, (0, 0, 0), (x, screen.get_height() - 150, key_width, 150), 1)
-        else:
-            pygame.draw.rect(screen, (0, 0, 0), (x - black_key_width // 2, screen.get_height() - 150, black_key_width, black_key_height))
-
-def calculate_key_positions(display_width, display_height):
+def calculate_key_positions(display_width, display_height, note_to_color=note_to_color):
     key_positions = {}
-    num_keys = len(note_to_color)
-    key_width = display_width // num_keys
-    for note in note_to_color:
-        x = (note % num_keys) * key_width
-        y = display_height - 150
-        key_positions[note] = (x, y)
-    return key_positions
+    white_keys = [note for note in note_to_color if note % 12 in [0, 2, 4, 5, 7, 9, 11]]
+    white_key_width = display_width // len(white_keys)
+    black_key_width = int(white_key_width * 0.6)
+    black_key_height = 100
 
+    white_key_index = 0
+    for note in sorted(note_to_color.keys()):
+        if note % 12 in [0, 2, 4, 5, 7, 9, 11]:
+            x = white_key_index * white_key_width
+            key_positions[note] = (x + white_key_width // 2, display_height - 150)
+            white_key_index += 1
+        elif note % 12 in [1, 3, 6, 8, 10]:
+            # Position black keys between the white keys, without extra space
+            prev_white_key_x = (white_key_index - 1) * white_key_width
+            x = prev_white_key_x + (white_key_width - black_key_width // 2)
+            key_positions[note] = (x, display_height - 150 - black_key_height)
+
+    return key_positions
 async def main_loop():
-    display = (1600, 900)
+    display = (800, 800 // 16 * 9)
     init_pygame(display)
     screen = pygame.display.get_surface()
     particles = []
@@ -169,14 +178,26 @@ async def main_loop():
                 await handle_keyup(event, keys_being_pressed)
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_x, mouse_y = pygame.mouse.get_pos()
-                note = mouse_x // key_width + 48
+                note = mouse_x // key_width + 48  # Calculate the base note assuming it's a white key
+                black_key_height = display[1] - 150 - 100  # Height of the black keys
+                # Determine if the note is a black key based on its position in the scale
+                if note % 12 in [1, 3, 6, 8, 10]:  # These are the positions of black keys in an octave
+                    # Check if the mouse click was within the height range of black keys
+                    if mouse_y <= black_key_height:
+                        # It's a black key, and the click was within the black key's height
+                        pass  # The note is correctly set
+                    else:
+                        # The click was outside the black key's height, adjust the note for a white key
+                        # This logic might need adjustment based on the specific layout of your piano keys
+                        note -= 1 if note % 12 in [1, 3] else 1
+                # If the note is not a black key, no adjustment is needed based on mouse_y
+
                 if note in key_positions:
                     keys_being_pressed[0] = note
                     x, y = key_positions[note]
                     color = note_to_color.get(note, (255, 255, 255))
                     particles.append(Particle(x, y, color))
                     play_wave(note)
-
         render_scene(screen, particles, key_positions, keys_being_pressed)
         await asyncio.sleep(0)
 
