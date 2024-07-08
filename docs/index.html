@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-T7HFKFX0PR"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-T7HFKFX0PR');
+    </script>
+    <!-- End Google tag (gtag.js) -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Piano - Play Piano Online with audio and visual effects</title>
+    <meta name="description"
+        content="Online Piano is a virtual piano that allows you to play piano online with audio and visual effects. Play your favorite songs, practice your piano skills, and enjoy the music! Written in Python with Pygame, OpenGL, and NumPy.">
+    <meta name="keywords" content="online piano, virtual piano, play piano online, piano online, piano simulator, python, pygame, opengl, numpy, pygame, music, audio, visual, synthesizer">
+    <meta name="author" content="Dor Pascal">
+    <meta name="robots" content="index, follow">
+    <meta name="revisit-after" content="3 months">
+    <meta name="language" content="en">
+    <meta name="generator" content="Visual Studio Code">
+    <meta name="distribution" content="global">
+    <meta name="rating" content="general">
+    <meta property="og:title" content="Online Piano - Play Piano Online with audio and visual effects">
+    <meta property="og:description"
+        content="Online Piano is a virtual piano that allows you to play piano online with audio and visual effects. Play your favorite songs, practice your piano skills, and enjoy the music! Written in Python with Pygame, OpenGL, and NumPy.">
+    <meta property="og:url" content="https://dorpascal.com/audio-visual-synth">
+    <meta property="og:site_name" content="Dor Pascal">
+    <meta property="og:locale" content="he_IL">
+    <meta property="og:type" content="website">
+    <meta property="og:locale:alternate" content="en_US">
+    <meta property="og:locale:alternate" content="ar_IL">
+    <meta property="og:image" content="https://dorpascal.com/audio-visual-synth/images/david.gif">
+    <meta name="theme-color" content="#6A82FB">
+    <link rel="icon" href="https://dorpascal.com/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="https://dorpascal.com/favicon.ico">
+    <link rel="canonical" href="https://dorpascal.com/audio-visual-synth">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="./styles.css">
+</head>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AudioVisualSynth</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>AudioVisualSynth</h1>
+        <p align="center">
+            <!-- <img src="https://dorpascal.com/audio-visual-synth/images/david.gif" alt="AudioVisualSynth Logo"> -->
+        </p>
+        <div class="badges">
+            <img src="https://img.shields.io/github/license/Dor-sketch/AudioVisualSynth" alt="License">
+            <img src="https://img.shields.io/github/issues/Dor-sketch/AudioVisualSynth" alt="Issues">
+            <img src="https://img.shields.io/github/stars/Dor-sketch/AudioVisualSynth" alt="Stars">
+            <img src="https://img.shields.io/github/forks/Dor-sketch/AudioVisualSynth" alt="Forks">
+        </div>
+    </header>
+
+    <main>
+
+
+        <section class="app">
+            <h2>Try the App</h2>
+            <div class="iframe-container">
+                <iframe src="./app.html" frameborder="0" allowfullscreen width="100%" height="100%" title = "AudioVisualSynth"></iframe>
+            </div>
+        </section>
+
+
+        <section class="description">
+            <p>Welcome to AudioVisualSynth, an interactive audio-visual synthesizer that combines 3D graphics rendering, MIDI-based audio synthesis, and a dynamic particle system to create a captivating multimedia experience. This project uses Python with libraries such as Pygame, OpenGL, and NumPy to bring music and visuals together in real-time.</p>
+        </section>
+
+        <section class="features">
+            <h2>Features</h2>
+            <ul>
+                <li><strong>3D Cube Visualization:</strong> Render a cube with edges that react to the music.</li>
+                <li><strong>MIDI Note Playback:</strong> Use keyboard inputs to generate MIDI sounds.</li>
+                <li><strong>Color Mapping:</strong> Visualize MIDI notes with corresponding colors through a particle system.</li>
+                <li><strong>Dynamic Particle System:</strong> Particles move and change in response to music, providing a visual representation of the audio.</li>
+                <li><strong>Music Sheets Images Processing:</strong> Convert music sheets images to MIDI notes (beta).</li>
+                <li><strong>Music Intervals Training:</strong> Train your ear to recognize different musical intervals.</li>
+                <li><strong>Metronome:</strong> Keep time with an adjustable metronome feature.</li>
+            </ul>
+
+            <h3>3D Notes Animation</h3>
+            <p><a href="https://github.com/Dor-sketch/AudioVisualSynth/assets/138825033/42a33834-a56d-4695-8607-f15fd25d123d">Watch the video here</a></p>
+
+            <h3>`HaTikva` Synth Autoplay mode</h3>
+            <p><a href="https://github.com/Dor-sketch/AudioVisualSynth/assets/138825033/5d5aa6d6-9688-42f7-89ef-ec6a32943f91">Watch the video here</a></p>
+        </section>
+
+        <section class="installation">
+            <h2>Installation</h2>
+            <p>To run AudioVisualSynth, you need to have Python installed along with several dependencies. Here's how you can get started:</p>
+
+            <h3>Prerequisites</h3>
+            <ul>
+                <li>Python 3.8 or later</li>
+                <li>Pygame</li>
+                <li>PyOpenGL</li>
+                <li>NumPy</li>
+            </ul>
+
+            <h3>Setting Up</h3>
+            <ol>
+                <li>Clone the repository:
+                    <pre><code>git clone https://github.com/Dor-sketch/AudioVisualSynth.git
+cd AudioVisualSynth</code></pre>
+                </li>
+                <li>Install the required packages:
+                    <pre><code>pip install -r requirements.txt</code></pre>
+                </li>
+                <li>Run the main script:
+                    <pre><code>python main.py</code></pre>
+                </li>
+            </ol>
+        </section>
+
+        <section class="usage">
+            <h2>Usage</h2>
+            <p>Use your keyboard to interact with the synthesizer. Each key corresponds to a different MIDI note and triggers a unique visual effect. For extending a note, hold the <code>space</code> key while pressing the desired note - like in piano.</p>
+
+            <p>For example, the following keys are mapped to MIDI notes:</p>
+            <ul>
+                <li><code>a</code> - C4</li>
+                <li><code>s</code> - D4</li>
+                <li><code>d</code> - E4</li>
+                <li><code>f</code> - F4</li>
+                <li><code>g</code> - G4</li>
+                ...
+            </ul>
+
+            <p>The sharps and flats are mapped to the keys above - like the black keys in piano.</p>
+            <ul>
+                <li><code>w</code> - C#4</li>
+                <li><code>e</code> - D#4</li>
+                <li><code>t</code> - F#4</li>
+                <li><code>y</code> - G#4</li>
+                ...
+            </ul>
+        </section>
+
+        <section class="contributing">
+            <h2>Contributing</h2>
+            <p>Contributions are welcome! Feel free to open an issue or submit a pull request if you have any suggestions or improvements. The following are some ways you can contribute to this project:</p>
+            <ul>
+                <li>Performance optimization: The current implementation may not be optimized for speed or memory usage. You could help improve the performance of the synthesizer by optimizing the code or using more efficient algorithms.</li>
+                <li>Improve user experience: The current user interface is minimalistic and may not be user-friendly. You could help improve the user experience by adding more features, improving the visual design, or providing better feedback to the user.</li>
+                <li>Implement the music sheets images processing feature: The current implementation of the music sheets images processing feature is in beta and may not work correctly in all cases. You could help improve this feature by adding more robust image processing algorithms or improving the accuracy of the note detection.</li>
+            </ul>
+        </section>
+
+        <section class="license">
+            <h2>License</h2>
+            <p>This project is licensed under the MIT License - see the <a href="LICENSE">LICENSE</a> file for details.</p>
+        </section>
+
+    </main>
+    <footer>
+        <p>Created by <a href="dorpascal.com">Dor Pascal</a> &copy; 2024</p>
+    </footer>
+</body>
+</html>

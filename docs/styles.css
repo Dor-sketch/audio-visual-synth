@@ -1,0 +1,92 @@
+:root {
+    --primary-bg-color: #6A82FB; /* Updated to a more vibrant blue */
+    --text-color: #4A4A4A; /* Softer dark gray for better readability */
+    --light-bg-color: #F7F8FA; /* Updated to a cleaner light background */
+    --accent-color: #FFC371; /* Adding an accent color for highlights */
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern, readable font */
+}
+
+body {
+    font-family: var(--font-family);
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #EAEAEA, #D6D6D6); /* Corrected to 'background' for gradient */
+    color: var(--text-color);
+    font-size: 1.125rem; /* Responsive font size */
+}
+
+header {
+    text-align: center;
+    background: linear-gradient(135deg, var(--primary-bg-color), var(--accent-color)); /* Corrected to 'background' for gradient */
+    color: white;
+    padding: 2.5rem 0;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.15); /* Slightly deeper shadow for more depth */
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
+header:hover {
+    background-color: darken(var(--primary-bg-color), 10%); /* Slightly darken on hover */
+}
+
+.badges img {
+    margin: 0 10px;
+    border-radius: 5px;
+    transition: transform 0.3s ease; /* Smooth transition */
+}
+
+.badges img:hover {
+    transform: scale(1.05); /* Slight scale on hover */
+}
+
+main {
+    padding: 2.5rem;
+    max-width: 800px;
+    margin: auto;
+}
+
+section {
+    margin-bottom: 3.75rem;
+}
+
+.iframe-container {
+    aspect-ratio: 16 / 9;
+    padding: 10px;
+}
+
+iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+pre, code {
+    background-color: var(--light-bg-color);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+code {
+    padding: 4px 8px;
+}
+
+a, button {
+    transition: color 0.3s ease, background-color 0.3s ease; /* Smooth transition */
+}
+
+a:hover, button:hover {
+    color: var(--primary-bg-color); /* Change color on hover */
+}
+
+/* Accessibility: Focus styles for keyboard navigation */
+a:focus, button:focus {
+    outline: 2px solid var(--primary-bg-color);
+    outline-offset: 2px;
+}
+
+footer {
+    text-align: center;
+    padding: 1.25rem 0;
+    background: var(--primary-bg-color);
+    color: #000;
+    font-size: 0.875rem; /* Smaller font size */
+    box-shadow: 0 -4px 6px rgba(0,0,0,0.15); /* Inset shadow for footer */
+}

@@ -1,20 +1,3 @@
-"""
-This is the main file for the music visualizer. The program has the following features:
-
-- It uses Pygame to:
-    - Create a window
-    - Handle user input, including mouse clicks on the keys to play the corresponding notes
-
-- It uses NumPy to generate sound waves for different notes
-
-- When a key is pressed:
-    - It creates particles that move upwards
-    - It plays a sound corresponding to the note of the key
-
-- The particles:
-    - Are colored based on the note
-    - Fade out over time
-"""
 import asyncio
 import pygame
 from pygame.locals import *
@@ -55,6 +38,7 @@ key_to_note = {
 }
 
 import random
+
 # Particle class
 class Particle:
     def __init__(self, x, y, color):
@@ -71,17 +55,15 @@ class Particle:
 
     def draw(self, screen):
         if self.size > 0:  # Only draw the particle if it hasn't faded out
-            surface = pygame.Surface((self.size*2, self.size*2), pygame.SRCALPHA)  # Create a new surface with alpha channel
+            surface = pygame.Surface((self.size * 2, self.size * 2), pygame.SRCALPHA)  # Create a new surface with alpha channel
             pygame.draw.circle(surface, self.color + (self.alpha,), (self.size, self.size), self.size)  # Draw the particle on the surface
             screen.blit(surface, (self.x - self.size, self.y - self.size))  # Blit the surface onto the screen
-def init_pygame(display=(800, 600)):
+
+def init_pygame(display=(1600, 900)):
     pygame.init()
     pygame.display.set_mode(display)
     pygame.display.set_caption("Pygame Music Visualizer")
-    #high framerate
     pygame.time.set_timer(pygame.USEREVENT, 1000 // 60)
-    #high fps
-    pygame.time.set_timer(pygame.USEREVENT + 1, 1000 // 60)
 
 def generate_wave(note, duration=1.0, volume=0.5, sample_rate=44100):
     frequency = 440 * 2 ** ((note - 69) / 12)
@@ -101,7 +83,6 @@ def generate_wave(note, duration=1.0, volume=0.5, sample_rate=44100):
         np.linspace(sustain_level, 0, int(sample_rate * release_time))  # Release
     ])
 
-    # Ensure the envelope matches the length of the sound wave
     envelope = np.pad(envelope, (0, max(0, len(t) - len(envelope))), 'constant')
 
     wave = 0.5 * np.sin(frequency * 2 * np.pi * t) * envelope * volume
@@ -131,56 +112,45 @@ async def handle_keyup(event, keys_being_pressed):
     if event.key in keys_being_pressed:
         del keys_being_pressed[event.key]
 
-def render_scene(screen, particles):
+def render_scene(screen, particles, key_positions, keys_being_pressed):
     screen.fill((0, 0, 0))
+    draw_piano_keys(screen, key_positions, keys_being_pressed)
     for particle in particles:
         particle.move()
         particle.draw(screen)
     pygame.display.flip()
 
+def draw_piano_keys(screen, key_positions, keys_being_pressed):
+    white_keys = [0, 2, 4, 5, 7, 9, 11]
+    black_keys = [1, 3, 6, 8, 10]
 
+    key_width = screen.get_width() // len(note_to_color)
+    black_key_width = key_width // 2
+    black_key_height = key_width
+
+    for i, note in enumerate(note_to_color.keys()):
+        octave = (note // 12) - 4
+        x = (i * key_width) % screen.get_width()
+        is_pressed = note in keys_being_pressed.values()
+        color = (180, 180, 180) if is_pressed else (255, 255, 255)
+        if note % 12 in white_keys:
+            pygame.draw.rect(screen, color, (x, screen.get_height() - 150, key_width, 150))
+            pygame.draw.rect(screen, (0, 0, 0), (x, screen.get_height() - 150, key_width, 150), 1)
+        else:
+            pygame.draw.rect(screen, (0, 0, 0), (x - black_key_width // 2, screen.get_height() - 150, black_key_width, black_key_height))
 
 def calculate_key_positions(display_width, display_height):
     key_positions = {}
     num_keys = len(note_to_color)
     key_width = display_width // num_keys
     for note in note_to_color:
-        octave = (note // 12) - 4
-        x = (((note % num_keys) * key_width + key_width // 2) - 350 ) % display_width
-        y = display_height - (octave + 1) * 50
+        x = (note % num_keys) * key_width
+        y = display_height - 150
         key_positions[note] = (x, y)
     return key_positions
 
 async def main_loop():
-    display = (800, 600)
-    init_pygame(display)
-    screen = pygame.display.get_surface()
-    particles = []
-    running = True
-    keys_being_pressed = {}
-    key_positions = calculate_key_positions(display[0], display[1])
-
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            elif event.type == pygame.KEYDOWN:
-                await handle_keydown(event, keys_being_pressed, particles, key_positions)
-            elif event.type == pygame.KEYUP:
-                await handle_keyup(event, keys_being_pressed)
-def calculate_key_positions(display_width, display_height):
-    key_positions = {}
-    num_keys = len(note_to_color)
-    key_width = display_width // num_keys
-    for note in note_to_color:
-        octave = (note // 12) - 4
-        x = (((note % num_keys) * key_width + key_width // 2) - 350 ) % display_width
-        y = display_height - (octave + 1) * 50
-        key_positions[note] = (x, y)
-    return key_positions
-
-async def main_loop():
-    display = (800, 600)
+    display = (1600, 900)
     init_pygame(display)
     screen = pygame.display.get_surface()
     particles = []
@@ -207,8 +177,7 @@ async def main_loop():
                     particles.append(Particle(x, y, color))
                     play_wave(note)
 
-
-        render_scene(screen, particles)
+        render_scene(screen, particles, key_positions, keys_being_pressed)
         await asyncio.sleep(0)
 
     pygame.quit()

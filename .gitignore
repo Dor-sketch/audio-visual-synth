@@ -8,3 +8,5 @@ __pycache__
 *.mp3
 /AudioVisualSynth/*
 !/AudioVisualSynth/main.py
+/docs/*.pem
+/docs/serve.py
