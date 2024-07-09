@@ -14,7 +14,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online Piano - Play Piano Online with audio and visual effects</title>
+    <title>Online Piano - Play Piano Online with audio and visual effects with AudioVisualSynth</title>
     <meta name="description"
         content="Online Piano is a virtual piano that allows you to play piano online with audio and visual effects. Play your favorite songs, practice your piano skills, and enjoy the music! Written in Python with Pygame, OpenGL, and NumPy.">
     <meta name="keywords" content="online piano, virtual piano, play piano online, piano online, piano simulator, python, pygame, opengl, numpy, pygame, music, audio, visual, synthesizer">
@@ -29,7 +29,7 @@
     <meta property="og:description"
         content="Online Piano is a virtual piano that allows you to play piano online with audio and visual effects. Play your favorite songs, practice your piano skills, and enjoy the music! Written in Python with Pygame, OpenGL, and NumPy.">
     <meta property="og:url" content="https://dorpascal.com/audio-visual-synth">
-    <meta property="og:site_name" content="Dor Pascal">
+    <meta property="og:site_name" content="AudioVisualSynth - A new kind of play">
     <meta property="og:locale" content="he_IL">
     <meta property="og:type" content="website">
     <meta property="og:locale:alternate" content="en_US">
@@ -42,6 +42,17 @@
 
     <!-- Stylesheets -->
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/highlight.min.js"></script>
+    <script defer>
+        document.addEventListener("DOMContentLoaded", function() {
+            hljs.highlightAll();
+        });
+    </script>
 </head>
 
 <body>
@@ -51,21 +62,29 @@
             <!-- <img src="https://dorpascal.com/audio-visual-synth/images/david.gif" alt="AudioVisualSynth Logo"> -->
         </p>
         <div class="badges">
-            <img src="https://img.shields.io/github/license/Dor-sketch/AudioVisualSynth" alt="License">
-            <img src="https://img.shields.io/github/issues/Dor-sketch/AudioVisualSynth" alt="Issues">
-            <img src="https://img.shields.io/github/stars/Dor-sketch/AudioVisualSynth" alt="Stars">
-            <img src="https://img.shields.io/github/forks/Dor-sketch/AudioVisualSynth" alt="Forks">
+            <a href="https://github.com/Dor-sketch/AudioVisualSynth/blob/master/LICENSE">
+                <img src="https://img.shields.io/github/license/Dor-sketch/AudioVisualSynth" alt="License" loading="lazy">
+            </a>
+            <a href="https://github.com/Dor-sketch/AudioVisualSynth/issues">
+                <img src="https://img.shields.io/github/issues/Dor-sketch/AudioVisualSynth" alt="Issues" loading="lazy">
+            </a>
+            <a href="https://github.com/Dor-sketch/AudioVisualSynth/stargazers">
+                <img src="https://img.shields.io/github/stars/Dor-sketch/AudioVisualSynth" alt="Stars" loading="lazy">
+            </a>
+            <a href="https://github.com/Dor-sketch/AudioVisualSynth/network/members">
+                <img src="https://img.shields.io/github/forks/Dor-sketch/AudioVisualSynth" alt="Forks" loading="lazy">
+            </a>
         </div>
     </header>
 
     <article class="app">
-            <div class="iframe-container">
-                <iframe src="./app.html" frameborder="0" allowfullscreen width="100%" height="100%" title = "AudioVisualSynth"></iframe>
-            </div>
-</article>
+        <div class="iframe-container">
+            <!-- Placeholder for lazy loading iframe -->
+            <div id="iframe-placeholder" style="width: 100%; height: 100%;"></div>
+        </div>
+    </article>
+
     <main>
-
-
         <section class="description">
             <h2>Try the App</h2>
             <p>Welcome to AudioVisualSynth, an interactive audio-visual synthesizer that combines 3D graphics rendering, MIDI-based audio synthesis, and a dynamic particle system to create a captivating multimedia experience. This project uses Python with libraries such as Pygame, OpenGL, and NumPy to bring music and visuals together in real-time.</p>
@@ -128,16 +147,15 @@ cd AudioVisualSynth</code></pre>
                 <li><code>d</code> - E4</li>
                 <li><code>f</code> - F4</li>
                 <li><code>g</code> - G4</li>
-                ...
             </ul>
 
             <p>The sharps and flats are mapped to the keys above - like the black keys in piano.</p>
             <ul>
+                <li><code>w</code
                 <li><code>w</code> - C#4</li>
                 <li><code>e</code> - D#4</li>
                 <li><code>t</code> - F#4</li>
                 <li><code>y</code> - G#4</li>
-                ...
             </ul>
         </section>
 
@@ -153,12 +171,27 @@ cd AudioVisualSynth</code></pre>
 
         <section class="license">
             <h2>License</h2>
-            <p>This project is licensed under the MIT License - see the <a href="LICENSE">LICENSE</a> file for details.</p>
+            <p>This project is licensed under the MIT License - see the <a href="../LICENSE">LICENSE</a> file for details.</p>
         </section>
 
     </main>
     <footer>
         <p>Created by <a href="https://dorpascal.com">Dor Pascal</a> &copy; 2024</p>
     </footer>
+
+    <!-- Defer loading of the iframe until the DOM is fully loaded -->
+    <script defer>
+        document.addEventListener("DOMContentLoaded", function() {
+            var iframePlaceholder = document.getElementById('iframe-placeholder');
+            var iframe = document.createElement('iframe');
+            iframe.src = "./app.html";
+            iframe.frameBorder = "0";
+            iframe.allowFullscreen = true;
+            iframe.width = "100%";
+            iframe.height = "100%";
+            iframe.title = "AudioVisualSynth";
+            iframePlaceholder.appendChild(iframe);
+        });
+    </script>
 </body>
 </html>

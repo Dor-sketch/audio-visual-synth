@@ -1,9 +1,9 @@
 :root {
-    --primary-bg-color: #6A82FB; /* Updated to a more vibrant blue */
+    --primary-bg-color: #8A9DFF; /* Updated to a more vibrant blue */
     --text-color: #4A4A4A; /* Softer dark gray for better readability */
     --light-bg-color: #F7F8FA; /* Updated to a cleaner light background */
     --accent-color: #FFC371; /* Adding an accent color for highlights */
-    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern, readable font */
+    --font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern, readable font */
 }
 
 body {
@@ -13,28 +13,36 @@ body {
     background: linear-gradient(135deg, #EAEAEA, #D6D6D6); /* Corrected to 'background' for gradient */
     color: var(--text-color);
     font-size: 1.125rem; /* Responsive font size */
+    line-height: 1.6; /* Improved line height for readability */
 }
 
 header {
     text-align: center;
     background: linear-gradient(135deg, var(--primary-bg-color), var(--accent-color)); /* Corrected to 'background' for gradient */
     color: white;
-    padding: 2.5rem 0;
+    padding: 1.5rem 0;
     box-shadow: 0 4px 6px rgba(0,0,0,0.15); /* Slightly deeper shadow for more depth */
     transition: background-color 0.3s ease; /* Smooth transition */
 }
 header:hover {
     background-color: darken(var(--primary-bg-color), 10%); /* Slightly darken on hover */
 }
-
 .badges img {
+    width: auto; /* Adjusts width based on the badge's original aspect ratio */
+    max-width: 100%; /* Ensures badge does not exceed its container's width */
+    height: auto; /* Height adjusts automatically to maintain aspect ratio */
     margin: 0 10px;
-    border-radius: 5px;
-    transition: transform 0.3s ease; /* Smooth transition */
+    border-radius: 5px; /* Rounded corners */
+    transition: transform 0.3s ease; /* Smooth transition for hover effects */
 }
-
+.badge {
+    width: auto; /* or set a specific width */
+    height: auto; /* Adjust height as needed */
+    display: inline-block;
+    background-size: contain;
+}
 .badges img:hover {
-    transform: scale(1.05); /* Slight scale on hover */
+    transform: scale(1.05) translateZ(0); /* Slight scale on hover, with 3D translation to improve rendering */
 }
 
 main {
@@ -68,22 +76,12 @@ iframe {
     border: none;
 }
 
-pre, code {
-    background-color: var(--light-bg-color);
-    padding: 10px;
-    border-radius: 5px;
-}
-
-code {
-    padding: 4px 8px;
-}
-
 a, button {
     transition: color 0.3s ease, background-color 0.3s ease; /* Smooth transition */
 }
 
 a:hover, button:hover {
-    color: var(--primary-bg-color); /* Change color on hover */
+    color:'black'; /* Change color on hover */
 }
 
 /* Accessibility: Focus styles for keyboard navigation */
@@ -96,11 +94,48 @@ footer {
     text-align: center;
     padding: 1.25rem 0;
     background: var(--primary-bg-color);
-    color: #000;
+    color: #000000;
     font-size: 0.875rem; /* Smaller font size */
     box-shadow: 0 -4px 6px rgba(0,0,0,0.15); /* Inset shadow for footer */
 }
 
+footer a {
+    color: #141414;
+}
+
 html,body  {
     overflow-x: hidden;
+}
+
+h1 {
+    font-size: 2.5rem; /* Larger heading size */
+    margin-bottom: 1.25rem;
+    letter-spacing: 0.05em; /* Slightly increased letter spacing */
+}
+
+h2 {
+    font-size: 2rem; /* Slightly larger heading size */
+    margin-bottom: 1rem;
+}
+
+h3 {
+    font-size: 1.5rem; /* Standard heading size */
+    margin-bottom: 0.75rem;
+}
+
+.app {
+border-radius: 0;
+margin-bottom: 0;
+}
+
+header a {
+    color: white;
+    text-decoration: none;
+}
+
+.badges {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1.25rem;
 }
