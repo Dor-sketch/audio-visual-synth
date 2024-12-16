@@ -39,6 +39,8 @@ To run AudioVisualSynth, you need to have Python installed along with several de
 - PyOpenGL
 - NumPy
 
+**Note**: The application currently experiences a segmentation fault on macOS 15 with the M2 chip. This issue is under investigation. If you encounter this problem, please report it with detailed information about your system configuration and any error messages.
+
 ### Setting Up
 
 1. Clone the repository:
